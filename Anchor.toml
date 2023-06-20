@@ -1,0 +1,20 @@
+[programs.localnet]
+rs_staking_program = "9jxdsqoZXLp7m7eerXEnXaDmCak73DjGEaUXwQiubC61"
+
+[programs.devnet]
+rs_staking_program = "9jxdsqoZXLp7m7eerXEnXaDmCak73DjGEaUXwQiubC61"
+
+[programs.mainnet]
+rs_staking_program = "9jxdsqoZXLp7m7eerXEnXaDmCak73DjGEaUXwQiubC61"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "localnet"
+#cluster = "devnet"
+#wallet = "/root/.config/solana/id.json"
+wallet = "/root/work/RS-nft-staking/target/deploy/rs_staking_program-keypair.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
