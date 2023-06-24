@@ -10,8 +10,6 @@ pub struct PoolConfig {
     pub admin: Pubkey,
     /// Paused state of the program
     pub paused: bool,
-    /// nft lock period
-    /*pub lock_day: u32,*/
     /// Mint of the reward token.
     pub reward_mint: Pubkey,
     /// Vault to store reward tokens.
@@ -21,5 +19,5 @@ pub struct PoolConfig {
     /// Tokens Staked
     pub staked_nft: u32,
     /// Reward amount per day according to class type
-    pub /*reward_policy_by_class: [u16; CLASS_TYPES]*/reward_per_week: u16,
+    pub reward_per_week: u16,
 }

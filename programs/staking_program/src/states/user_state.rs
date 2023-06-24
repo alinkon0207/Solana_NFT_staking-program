@@ -12,7 +12,7 @@ pub struct StakeInfo {
 }
 
 impl StakeInfo {
-    pub fn update_reward(&mut self, now: i64, /*reward_per_day*/reward_per_week: u16) -> Result<u64> {
+    pub fn update_reward(&mut self, now: i64, reward_per_week: u16) -> Result<u64> {
         let mut last_reward_time = self.last_update_time;
         if last_reward_time < self.stake_time {
             last_reward_time = self.stake_time;
@@ -22,13 +22,12 @@ impl StakeInfo {
         let reward = (unit_amount as u128)
             .checked_mul((now as u128).checked_sub(last_reward_time as u128).unwrap())
             .unwrap()
-            .checked_mul(/*reward_per_day*/reward_per_week as u128)
+            .checked_mul(reward_per_week as u128)
             .unwrap()
             .checked_div(REWARD_DENOMIATOR as u128)
             .unwrap()
-            .checked_div(/*DAY*/WEEK as u128)
+            .checked_div(WEEK as u128)
             .unwrap() as u64;
-        // old: reward = (((now - last_reward_time) / DAY) as u64) * reward_per_day;
         // reward = (((now - last_reward_time) / WEEK) as u64) * reward_per_week;
         self.last_update_time = now;
 

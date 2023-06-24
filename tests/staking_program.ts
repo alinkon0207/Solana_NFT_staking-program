@@ -38,19 +38,19 @@ describe('staking_program', () => {
 
   let initial_reward_vault_amount = 1_000_000_000;
   let deposit_amount = 100_000_000;
-  let class_types = [
-    10,
-    25,
-    30,
-    40,
-    55,
-    60,
-    70,
-    80,
-    90,
-  ];
-  let lock_day = 0;
-  let reward_per_week = 10; // 0.001
+  // let class_types = [    10,
+  //   25,
+  //   30,
+  //   40,
+  //   55,
+  //   60,
+  //   70,
+
+  //   80,
+  //   90,
+  // ];
+  // let lock_day = 0;
+  let reward_per_week = 1000; // 0.001
 
   it('Is initialized!', async () => {
     // Add your test here.
@@ -122,7 +122,6 @@ describe('staking_program', () => {
     ))[0];
     // console.log("funder_vault_account_ass = ", funder_vault_account_ass);
     console.log("funder_vault_account = ", funder_vault_account);
-    // console.log("associatedTokenAccountPubkey = ", associatedTokenAccountPubkey);
     // test end
 
     await reward_mint.mintTo(

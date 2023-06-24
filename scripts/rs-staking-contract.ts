@@ -61,9 +61,7 @@ const getTokenAccount = async (mintPk, userPk) => {
 
 const init = async () => {
     const txHash = await program.methods.initializeStakingPool(
-        // Constants.CLASS_TYPES,
-        // Constants.LOCK_DAY
-        REWARD_PER_WEEK
+        Constants.REWARD_PER_WEEK
     ).accounts(
         {
             admin: provider.wallet.publicKey,
@@ -78,12 +76,12 @@ const init = async () => {
 
     let _pool_config = await program.account.poolConfig.fetch(await Keys.getPoolKey());
     console.log("Admin of contract = ", _pool_config.admin.toBase58());
-    console.log("second class id: ", _pool_config.rewardPolicyByClass[1]);
     console.log('txHash =', txHash);
 }
 
 const updateSwardMint = async () => {
-    let new_sward_mint = new PublicKey("");
+    let new_sward_mint = new PublicKey("4FkRq5ikN6ZyF2SSH2tgvuFP4kf2vxTuDQN4Kqnz2MQz"
+        /*"9fEb3fTyP8cZtofbDRFRx6knoz1gBrcVK4x1GxT7QfNz"*/); // EMEkV2 token
     const txHash = await program.methods.changeRewardMint(
         new_sward_mint
     ).accounts(
@@ -99,13 +97,11 @@ const updateSwardMint = async () => {
 }
 
 const updateConfig = async () => {
-    let class_type = Constants.CLASS_TYPES;
-    let lock_day = 20;
+    let reward_per_week = 1000; // 0.001
     let paused = false;
 
     const txHash = await program.methods.changePoolSetting(
-        class_type,
-        lock_day,
+        reward_per_week,
         paused
     ).accounts(
         {
@@ -115,7 +111,7 @@ const updateConfig = async () => {
     ).rpc();
 
     let _pool_config = await program.account.poolConfig.fetch(await Keys.getPoolKey());
-    console.log("updated_lock_day = ", _pool_config.lockDay);
+    console.log("reward_per_week = ", _pool_config.rewardPerWeek);
     console.log("paused = ", _pool_config.paused);
     console.log('txHash =', txHash);
 }
@@ -171,14 +167,13 @@ const withdrawSWRD = async () => {
 
 const getSWRDAccount = async () => {
     const funder_reward_account = await getTokenAccount(Constants.SWRD_TOKEN_MINT, admin.publicKey);
-    // const _funder_reward_account = await provider.connection.getAccountInfo(funder_reward_account);
     console.log(`SWRD token account: ${funder_reward_account?.toBase58()}`);
     return funder_reward_account;
 }
 
 const stakeNFT = async () => {
     const mintPK = new PublicKey("5z695impWXPEtBuDvMnqy7yh45yvRtqEsE164NVFPqc7");
-    const txHash = await program.methods.stakeNft(2)
+    const txHash = await program.methods.stakeNft()
         .accounts(
             {
                 owner: admin.publicKey,
@@ -221,11 +216,10 @@ const claimReward = async () => {
 const unstakeNFT = async () => {
     const mintPK = new PublicKey("5z695impWXPEtBuDvMnqy7yh45yvRtqEsE164NVFPqc7");//("DdpEZxxfAj5tXUDCu8fdw6vs2vrmnx6KR7LdChTgr3Jz");
     const reward_to_account = await getAssociatedTokenAccount(admin.publicKey, Constants.SWRD_TOKEN_MINT);
-    // const nft_to_account = await getNFTTokenAccount(mintPK);
     const nft_to_account = await getTokenAccount(mintPK, admin.publicKey);
     console.log("reward_to_account: ", reward_to_account.toBase58());
     console.log("nft_to_account: ", nft_to_account.toBase58());
-    const txHash = await program.methods.unstakeNFT()
+    const txHash = await program.methods.unstakeNft()
         .accounts(
             {
                 owner: admin.publicKey,

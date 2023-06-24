@@ -84,20 +84,9 @@ pub fn unstake_nft(ctx: Context<WithdrawNft>) -> Result<()> {
     let staking_info = &mut ctx.accounts.nft_stake_info_account;
     let pool_account = &mut ctx.accounts.pool_account;
 
-    // let unlock_time = staking_info
-    //     .stake_time
-    //     .checked_add(
-    //         (pool_account.lock_day as i64)
-    //             .checked_mul(86400 as i64)
-    //             .unwrap(),
-    //     )
-    //     .unwrap();
-
-    // require!((unlock_time < timestamp), StakingError::InvalidWithdrawTime);
-
-    let /*reward_per_day*/reward_per_week = pool_account./*reward_policy_by_class[staking_info.class_id as usize]*/reward_per_week;
+    let reward_per_week = pool_account.reward_per_week;
     // When withdraw nft, calculate and send reward SWRD
-    let mut reward: u64 = staking_info.update_reward(timestamp, /*reward_per_day*/reward_per_week)?;
+    let mut reward: u64 = staking_info.update_reward(timestamp, reward_per_week)?;
 
     let vault_balance = ctx.accounts.reward_vault.amount;
     if vault_balance < reward {
